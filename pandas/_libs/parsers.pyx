@@ -614,6 +614,10 @@ cdef class TextReader:
         self.parser.cb_io = NULL
         self.parser.cb_cleanup = NULL
 
+        file_name = None
+        if '@' in source:
+            source, file_name = source.split('@')
+
         if self.compression:
             if self.compression == 'gzip':
                 if isinstance(source, str):
@@ -626,7 +630,10 @@ cdef class TextReader:
                 zip_file = zipfile.ZipFile(source)
                 zip_names = zip_file.namelist()
 
-                if len(zip_names) == 1:
+                if file_name:
+                    source = zip_file.open(file_name)
+
+                elif len(zip_names) == 1:
                     file_name = zip_names.pop()
                     source = zip_file.open(file_name)
 

@@ -346,6 +346,7 @@ def _infer_compression(
             return None
 
         # Infer compression from the filename/URL extension
+        filepath_or_buffer = filepath_or_buffer.split('@')[0]
         for compression, extension in _compression_to_extension.items():
             if filepath_or_buffer.endswith(extension):
                 return compression
